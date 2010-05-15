@@ -8,17 +8,23 @@
 
 #import "SoundPlayer.h"
 
-
 @implementation SoundPlayer
-@synthesize soundDictionary, bufferStorageArray;
+@synthesize soundDictionary, bufferDictionary;
 
 -(id)init{
 	if (self = [super init]) {
 		self.soundDictionary = [[NSMutableDictionary alloc] init];
-		self.bufferStorageArray = [[NSMutableArray alloc] init];
+		self.bufferDictionary = [[NSMutableDictionary alloc] init];
 		[self initOpenAL];
 	}
 	return self;
+}
+
+-(void)dealloc{
+	[self.soundDictionary release];
+	[self.bufferDictionary release];
+	[self cleanUpOpenAL:self];
+	[super dealloc];
 }
 
 -(void)initOpenAL{
@@ -33,45 +39,78 @@
 
 // returns sound key
 -(NSString*)prepBufferWithSound:(NeoSound*)sound AndGain:(float)gain AndPitch:(float)pitch{
-	NSString *key = @"snare";
+	if(!sound || !sound.fileName){
+		NSLog(@"Sound doesn't have filename");
+		return nil;
+	}
 	
-	AudioFileID fileID = [self openAudioFile:sound.fileName];
-	
-	UInt32 fileSize = [self audioFileSize:fileID];
-	
-	// Copy file into OpenAL buffer
-	unsigned char * outData = malloc(fileSize);
-	
-	// this where we actually get the bytes from the file and put them
-	// into the data buffer
-	OSStatus result = noErr;
-	result = AudioFileReadBytes(fileID, false, 0, &fileSize, outData);
-	AudioFileClose(fileID); //close the file
-	
-	if (result != 0) NSLog(@"cannot load effect: %@",sound.fileName);
+	NSString *key = [NSString stringWithFormat:@"%@%g%g",sound.fileName,gain,pitch];
+	NSLog(@"preparing sound: %@",key);
 	
 	NSUInteger bufferID;
-	// grab a buffer ID from openAL
-	alGenBuffers(1, &bufferID);
+	if ([self.bufferDictionary objectForKey:key]) {
+		NSNumber *num = (NSNumber*)[bufferDictionary objectForKey:key];
+
+		bufferID = [num unsignedIntValue];
+	} else {
 	
-	// jam the audio data into the new buffer
-	alBufferData(bufferID,AL_FORMAT_STEREO16,outData,fileSize,44100); 
-	
-	// save the buffer so I can release it later
-	// TODO: set up this array so it works, we're leaking for now.
-	[self.bufferStorageArray addObject:[NSNumber numberWithUnsignedInteger:bufferID]];
+		AudioFileID fileID = [self openAudioFile:[sound fullPath]];
+		
+		UInt32 fileSize = [self audioFileSize:fileID];
+		
+		// Copy file into OpenAL buffer
+
+		unsigned char * outData = malloc(fileSize);
+
+		// this where we actually get the bytes from the file and put them
+		// into the data buffer
+		OSStatus result = noErr;
+		result = AudioFileReadBytes(fileID, false, 0, &fileSize, outData);
+		AudioFileClose(fileID); //close the file
+		
+		if (result != 0) NSLog(@"cannot load effect: %@",sound.fileName);
+		
+		// grab a buffer ID from openAL
+		alGenBuffers(1, &bufferID);
+		
+		// jam the audio data into the new buffer
+		alBufferData(bufferID,AL_FORMAT_STEREO16,outData,fileSize,44100); 
+		
+		// save the buffer so I can release it later
+		// TODO: set up this array so it works, we're leaking for now.
+
+		[self.bufferDictionary setObject:[NSNumber numberWithUnsignedInteger:bufferID] forKey:key];
+		
+		// clean up the buffer
+		if (outData) {
+			free(outData);
+			outData = NULL;
+		}
+	}
 	
 	// BUFFERS READY
 	// NOW HOOK TO SOURCE
 	NSUInteger sourceID;
+	if ([self.soundDictionary objectForKey:key]) {
+		
+		sourceID = [[self.soundDictionary objectForKey:key] unsignedIntValue];
+		
+	} else {
+		
 	
 	// grab a source ID from openAL
 	alGenSources(1, &sourceID); 
 	
 	// attach the buffer to the source
 	alSourcei(sourceID, AL_BUFFER, bufferID);
-	// set some basic source prefs
+		
+		// store this for future use
+		[self.soundDictionary setObject:[NSNumber numberWithUnsignedInt:sourceID] forKey:key];	
+
+	}
 	
+	// set some basic source prefs
+		
 	// normalize Pitch valid between .5 and 2.0
 	float aPitch = pitch;
 	alSourcef(sourceID, AL_PITCH, aPitch);
@@ -83,21 +122,11 @@
 	BOOL loops = false;
 	if (loops) alSourcei(sourceID, AL_LOOPING, AL_TRUE);
 	
-	// store this for future use
-	[self.soundDictionary setObject:[NSNumber numberWithUnsignedInt:sourceID] forKey:key];	
-	
-	// clean up the buffer
-	if (outData)
-	{
-		free(outData);
-		outData = NULL;
-	}
 	return key;
 }
 
-
 -(void)playSound:(NSString*)soundKey{
-	NSNumber* numVal = [self.soundDictionary objectForKey:@"snare"];
+	NSNumber* numVal = [self.soundDictionary objectForKey:soundKey];
 	if (numVal == nil) return;
 	NSUInteger sourceID = [numVal unsignedIntValue];
 	alSourcePlay(sourceID);
@@ -120,11 +149,11 @@
 	[self.soundDictionary removeAllObjects];
 	
 	// delete the buffers
-	for (NSNumber * bufferNumber in self.bufferStorageArray) {
+	for (NSNumber * bufferNumber in [self.soundDictionary allValues]) {
 		NSUInteger bufferID = [bufferNumber unsignedIntegerValue];
 		alDeleteBuffers(1, &bufferID);
 	}
-	[self.bufferStorageArray removeAllObjects];
+	[self.bufferDictionary removeAllObjects];
 	
 	// destroy the context
 	alcDestroyContext(mContext);

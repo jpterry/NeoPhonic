@@ -8,9 +8,12 @@
 
 #import "SoundPickerViewController.h"
 
+#import "NeoPhonicAppDelegate.h"
+
 @implementation SoundPickerViewController
 @synthesize delegate;
 @synthesize player;
+@synthesize selectedSound;
 @synthesize soundLabel;
 @synthesize soundPickerView;
 @synthesize gainSlider, pitchSlider;
@@ -20,18 +23,19 @@
 - (IBAction)playPressed:(id)sender{
 	// Load selected sound into buffer and play it
 	
-	NeoSound *selectedSound = [[NeoSound alloc] initWithDefaults];
 	
 	// TODO: This needs to come from the datasource not be mocked
-	selectedSound.fileName = [[NSBundle mainBundle] pathForResource:@"Snare" ofType:@"caf"];
-	NSString* key = [player prepBufferWithSound:selectedSound AndGain:gainSlider.value AndPitch:pitchSlider.value];
+	//self.selectedSound.fileName = [[NSBundle mainBundle] pathForResource:@"Snare" ofType:@"caf"];
+	NSString* key = [player prepBufferWithSound:self.selectedSound AndGain:self.gainSlider.value AndPitch:self.pitchSlider.value];
+	
 	[player playSound:key];
+	//[player cleanUpOpenAL:self];
+	
 	
 }
 
 - (IBAction)savePressed:(id)sender{
-	// TODO: fix
-	[self.delegate soundPickerController:self DidChooseSound:nil InBuffer:nil];
+	[self.delegate soundPickerController:self DidChooseSound:self.selectedSound WithGain:self.gainSlider.value AndPitch:self.pitchSlider.value];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -41,13 +45,25 @@
     [super viewDidLoad];
 	
 	// Load up the list of sounds;
+	NeoPhonicAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	NSManagedObjectContext *context = appDelegate.managedObjectContext;
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"NeoSound" inManagedObjectContext:context];
+	[request setEntity:entity];
 	
-	// Core data?
-	// I'd like something like
+	NSError *error = nil;
+	NSArray *array = [context executeFetchRequest:request error:&error];
+	NSLog(@"%@",array);
+	
+	self.instruments = array;
+	[request release];
+	
+	self.selectedSound = [self.instruments objectAtIndex:0];
 	
 	//mock:
 	self.categories = [[NSMutableArray alloc] initWithObjects:@"Rock", @"Hip Hop",nil];
-	self.instruments = [[NSMutableArray alloc] initWithObjects:@"Static", @"Placeholder",nil];;
+	//self.instruments = [[NSMutableArray alloc] initWithObjects:@"Static", @"Placeholder",nil];
+	
 
 }
 
@@ -75,10 +91,21 @@
 	}
 }
 
+- (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+	if (component==1) {
+		return [NSString stringWithFormat:@"%@",[[self.instruments objectAtIndex:row] fileName]];
+	}
+	else {
+		return @"All";
+	}
+
+
+}
+
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
 	//Sound *sound = [[Sound alloc]initWithDefaults];	
 	//NSLog(@"%@",[Sound soundsForCategory:@"string"]);
-	
+	self.selectedSound = (NeoSound*)[self.instruments objectAtIndex:row];
 }
 
 
@@ -93,6 +120,7 @@
 }
 
 - (void)viewDidUnload {
+	self.player = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -100,8 +128,8 @@
 
 
 - (void)dealloc {
+	[self.player release];
     [super dealloc];
 }
-
 
 @end

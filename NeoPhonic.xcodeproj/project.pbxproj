@@ -15,10 +15,15 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D801B40F44B63D00FB423F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D801B30F44B63D00FB423F /* CoreData.framework */; };
+		D2145AF4119E4D8A008E3B1C /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = D2145AF3119E4D8A008E3B1C /* default.png */; };
+		D2145B01119E4E1F008E3B1C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D2145B00119E4E1F008E3B1C /* Default.png */; };
+		D24EC170119E281600B2460B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D24EC16F119E281600B2460B /* icon.png */; };
 		D2643D7E1190DBF0006C48F3 /* Bass.caf in Resources */ = {isa = PBXBuildFile; fileRef = D2643D7D1190DBF0006C48F3 /* Bass.caf */; };
 		D26F1A63119172C30080BB2C /* NeoSound.m in Sources */ = {isa = PBXBuildFile; fileRef = D26F1A62119172C30080BB2C /* NeoSound.m */; };
+		D27FDE8C119CCDF50045DDD4 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = D27FDDB4119CCDF40045DDD4 /* Sounds */; };
 		D28844FF119141970014906C /* SoundPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28844FD119141970014906C /* SoundPickerViewController.m */; };
 		D2884500119141970014906C /* SoundPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D28844FE119141970014906C /* SoundPickerView.xib */; };
+		D28EDDDE119EAB1A002A3B10 /* Loop.m in Sources */ = {isa = PBXBuildFile; fileRef = D28EDDDD119EAB1A002A3B10 /* Loop.m */; };
 		D2B73AA3118FCD8F0019F79A /* TriggerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B73AA1118FCD8F0019F79A /* TriggerViewController.m */; };
 		D2B73AA4118FCD8F0019F79A /* TriggerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2B73AA2118FCD8F0019F79A /* TriggerView.xib */; };
 		D2D6A59B1190B72C005F6637 /* SoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D6A59A1190B72C005F6637 /* SoundPlayer.m */; };
@@ -40,12 +45,18 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* NeoPhonic_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeoPhonic_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* NeoPhonic-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "NeoPhonic-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		D2145AF3119E4D8A008E3B1C /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
+		D2145B00119E4E1F008E3B1C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		D24EC16F119E281600B2460B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		D2643D7D1190DBF0006C48F3 /* Bass.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bass.caf; sourceTree = "<group>"; };
 		D26F1A61119172C30080BB2C /* NeoSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeoSound.h; sourceTree = "<group>"; };
 		D26F1A62119172C30080BB2C /* NeoSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NeoSound.m; sourceTree = "<group>"; };
+		D27FDDB4119CCDF40045DDD4 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sounds; sourceTree = "<group>"; };
 		D28844FC119141970014906C /* SoundPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundPickerViewController.h; sourceTree = "<group>"; };
 		D28844FD119141970014906C /* SoundPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundPickerViewController.m; sourceTree = "<group>"; };
 		D28844FE119141970014906C /* SoundPickerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SoundPickerView.xib; path = Classes/SoundPickerView.xib; sourceTree = "<group>"; };
+		D28EDDDC119EAB1A002A3B10 /* Loop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loop.h; sourceTree = "<group>"; };
+		D28EDDDD119EAB1A002A3B10 /* Loop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Loop.m; sourceTree = "<group>"; };
 		D2B73AA0118FCD8F0019F79A /* TriggerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerViewController.h; sourceTree = "<group>"; };
 		D2B73AA1118FCD8F0019F79A /* TriggerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriggerViewController.m; sourceTree = "<group>"; };
 		D2B73AA2118FCD8F0019F79A /* TriggerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TriggerView.xib; path = Classes/TriggerView.xib; sourceTree = "<group>"; };
@@ -120,6 +131,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D24EC16F119E281600B2460B /* icon.png */,
+				D2145AF3119E4D8A008E3B1C /* default.png */,
+				D27FDDB4119CCDF40045DDD4 /* Sounds */,
 				D2643D7D1190DBF0006C48F3 /* Bass.caf */,
 				D2D6A5B11190B918005F6637 /* Snare.caf */,
 				2819305F112F816700ECF9B4 /* NeoPhonic.xcdatamodeld */,
@@ -127,6 +141,7 @@
 				D2B73AA2118FCD8F0019F79A /* TriggerView.xib */,
 				D28844FE119141970014906C /* SoundPickerView.xib */,
 				8D1107310486CEB800E47090 /* NeoPhonic-Info.plist */,
+				D2145B00119E4E1F008E3B1C /* Default.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -149,6 +164,8 @@
 			children = (
 				D26F1A61119172C30080BB2C /* NeoSound.h */,
 				D26F1A62119172C30080BB2C /* NeoSound.m */,
+				D28EDDDC119EAB1A002A3B10 /* Loop.h */,
+				D28EDDDD119EAB1A002A3B10 /* Loop.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -209,6 +226,10 @@
 				D2D6A5B21190B918005F6637 /* Snare.caf in Resources */,
 				D2643D7E1190DBF0006C48F3 /* Bass.caf in Resources */,
 				D2884500119141970014906C /* SoundPickerView.xib in Resources */,
+				D27FDE8C119CCDF50045DDD4 /* Sounds in Resources */,
+				D24EC170119E281600B2460B /* icon.png in Resources */,
+				D2145AF4119E4D8A008E3B1C /* default.png in Resources */,
+				D2145B01119E4E1F008E3B1C /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +247,7 @@
 				D2D6A59B1190B72C005F6637 /* SoundPlayer.m in Sources */,
 				D28844FF119141970014906C /* SoundPickerViewController.m in Sources */,
 				D26F1A63119172C30080BB2C /* NeoSound.m in Sources */,
+				D28EDDDE119EAB1A002A3B10 /* Loop.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,7 +264,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = NeoPhonic_Prefix.pch;
 				INFOPLIST_FILE = "NeoPhonic-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PRODUCT_NAME = NeoPhonic;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
 		};
@@ -254,6 +278,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = NeoPhonic_Prefix.pch;
 				INFOPLIST_FILE = "NeoPhonic-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PRODUCT_NAME = NeoPhonic;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -267,9 +292,10 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.2;
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
@@ -282,10 +308,11 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.2;
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

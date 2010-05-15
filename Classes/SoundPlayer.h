@@ -15,14 +15,12 @@
 @interface SoundPlayer : NSObject {
 	ALCcontext* mContext;
 	ALCdevice* mDevice;
-	NSMutableArray *bufferStorageArray;
-	NSMutableDictionary *soundDictionary;
+	NSMutableDictionary *soundDictionary, *bufferDictionary;
 }
-@property (nonatomic, retain) NSMutableArray *bufferStorageArray;
-@property (nonatomic, retain) NSMutableDictionary *soundDictionary;
+@property (nonatomic, retain) NSMutableDictionary *soundDictionary, *bufferDictionary;
 
 -(void)initOpenAL;
-
+-(void)cleanUpOpenAL:(id)sender;
 -(void)playSound:(NSString*)soundKey;
 -(AudioFileID)openAudioFile:(NSString*)filePath;
 -(UInt32)audioFileSize:(AudioFileID)fileDescriptor;

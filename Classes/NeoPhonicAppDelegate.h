@@ -24,6 +24,9 @@
 }
 
 - (NSString *)applicationDocumentsDirectory;
+- (NSString *)soundsDirectory;
+
+- (void)installSounds;
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet TriggerViewController *triggerViewController;

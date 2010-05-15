@@ -27,6 +27,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
 	
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"installed"]){
+		[self installSounds];
+	}
     // Override point for customization after application launch
 	[window addSubview:triggerViewController.view];
 	[window makeKeyAndVisible];
@@ -138,13 +141,17 @@
 
 
 #pragma mark -
-#pragma mark Application's Documents directory
+#pragma mark Filesystem helpers
 
 /**
  Returns the path to the application's Documents directory.
  */
 - (NSString *)applicationDocumentsDirectory {
 	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+}
+
+- (NSString *)soundsDirectory {
+	return [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"Sounds"];
 }
 
 
@@ -159,6 +166,46 @@
     
 	[window release];
 	[super dealloc];
+}
+
+#pragma mark -
+#pragma mark Installation
+
+- (void)installSounds{
+	NSLog(@"Installing Sounds");
+	NSFileManager *fm = [NSFileManager defaultManager];
+	// Copy Sound directory from bundle to documents
+	NSError *error = nil;
+	NSLog(@"Copying files");
+	BOOL success = [fm copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"Sounds" ofType:nil] 
+							   toPath:[self soundsDirectory] 
+								error:&error];
+	if(!success){
+		NSLog(@"Couldn't copy sounds directory to documents: %@",error);
+		return; // Don't insert the sounds
+	}
+	NSLog(@"Done copying");
+	
+	// Insert Sounds into core data store
+	NSArray *catNames = [fm directoryContentsAtPath:[self soundsDirectory]];
+	
+	for (NSString *category in catNames){
+		NSLog(@"in category %@:", category);
+		NSString *currentPath = [[self soundsDirectory] stringByAppendingPathComponent:category];
+		NSArray *soundFileNames = [fm directoryContentsAtPath:currentPath];
+		for( NSString *soundFileName in soundFileNames){
+			NSLog(@"Inserting: %@",soundFileName);
+			NSManagedObject *newSound = [NSEntityDescription insertNewObjectForEntityForName:@"NeoSound" inManagedObjectContext:self.managedObjectContext];
+			[newSound setValue:category forKey:@"category"];
+			[newSound setValue:soundFileName forKey:@"fileName"];
+		}
+	}
+	error = nil;
+	if (![self.managedObjectContext save:&error]) {
+		NSLog(@"Couldn't save objects");
+	}
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"installed"];
+		
 }
 
 
