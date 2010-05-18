@@ -31,6 +31,7 @@
 		[self installSounds];
 	}
     // Override point for customization after application launch
+	[window setBackgroundColor:[UIColor blackColor]];
 	[window addSubview:triggerViewController.view];
 	[window makeKeyAndVisible];
 	

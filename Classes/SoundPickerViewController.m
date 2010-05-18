@@ -18,25 +18,24 @@
 @synthesize soundPickerView;
 @synthesize gainSlider, pitchSlider;
 @synthesize categories, instruments;
+@synthesize button;
 
 #pragma mark Actions
 - (IBAction)playPressed:(id)sender{
-	// Load selected sound into buffer and play it
-	
-	
-	// TODO: This needs to come from the datasource not be mocked
-	//self.selectedSound.fileName = [[NSBundle mainBundle] pathForResource:@"Snare" ofType:@"caf"];
-	NSString* key = [player prepBufferWithSound:self.selectedSound AndGain:self.gainSlider.value AndPitch:self.pitchSlider.value];
-	
+	NSString* key = [player prepBufferWithSound:self.selectedSound AndGain:self.gainSlider.value AndPitch:self.pitchSlider.value];	
 	[player playSound:key];
-	//[player cleanUpOpenAL:self];
-	
-	
 }
 
 - (IBAction)savePressed:(id)sender{
 	[self.delegate soundPickerController:self DidChooseSound:self.selectedSound WithGain:self.gainSlider.value AndPitch:self.pitchSlider.value];
 }
+
+- (IBAction)donePressed:(id)sender{
+	[self.delegate soundPickerControllerDidCancel:self];
+}
+
+#pragma mark -
+#pragma mark View lifecycle
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -53,7 +52,6 @@
 	
 	NSError *error = nil;
 	NSArray *array = [context executeFetchRequest:request error:&error];
-	NSLog(@"%@",array);
 	
 	self.instruments = array;
 	[request release];
@@ -68,38 +66,19 @@
 }
 
 
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
 #pragma mark -
 #pragma mark Picker view
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-	return 2;
+	return 1;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-	if (component == 0) {
-		return [self.categories count];
-	}
-	else {
-		return [self.instruments count];
-	}
+	return [self.instruments count];
 }
 
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
-	if (component==1) {
 		return [NSString stringWithFormat:@"%@",[[self.instruments objectAtIndex:row] fileName]];
-	}
-	else {
-		return @"All";
-	}
-
-
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{

@@ -17,59 +17,82 @@
 @synthesize loopTimer;
 @synthesize noteArray;
 @synthesize position;
+@synthesize soundPlayer;
 
 
 - (id)init{
 	if (self = [super init]) {
-//		NSUInteger beats = 4;
+		self.soundPlayer = [[SoundPlayer alloc] init];
 		self.quarterNotes = 4; // 4/4 @ 120bp
-		self.quarterNoteLength = [NSNumber numberWithDouble:((float)1/(float)4)];
+		self.quarterNoteLength = [NSNumber numberWithFloat:.25];
 		self.bpm = 120;
-		self.noteArray = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
-- (void)startRecordingWithPlaybackLoop:(id)sender{	
-	self.position = 0;
-	NSUInteger arraySize = kSubBeatsPerMeasure * self.quarterNotes;
-	NSTimeInterval nextFire = ((double)self.quarterNotes * [self.quarterNoteLength doubleValue] * ((float)60 / self.bpm) / kSubBeatsPerMeasure);
-
-	SEL timerFireMethod = @selector(timerFireMethod:);
-	self.loopTimer = [NSTimer scheduledTimerWithTimeInterval:nextFire target:self selector:timerFireMethod userInfo:nil repeats:YES];
+- (void)startRecording:(id)sender{
+	// Not implemented
 }
 
-- (void)startRecording:(id)sender{
+- (void)startRecordingWithPlaybackLoop:(id)sender{
+	[self clearNoteArray];
+	NSTimeInterval nextFire = ((double)self.quarterNotes * [self.quarterNoteLength doubleValue] * (((float)60 / self.bpm) / kSubBeatsPerMeasure));
+	SEL timerFireMethod = @selector(timerFireMethod:);
+	self.loopTimer = [NSTimer scheduledTimerWithTimeInterval:nextFire target:self selector:timerFireMethod userInfo:nil repeats:YES];	
+}
+
+- (void)reset:(id)sender{
+	self.position = 0;
+	[self clearNoteArray];
+}
+
+- (void)clearNoteArray{
+	[self.noteArray release];
+	NSUInteger numberOfSubBeats = kSubBeatsPerMeasure * self.quarterNotes;
+	self.noteArray = [[NSMutableArray alloc] initWithCapacity:numberOfSubBeats];
+	//populate with empty sets of notes
+	for (int i = 0; i<=numberOfSubBeats; i++) {
+		NSMutableSet *subBeatNotes = [[NSMutableSet alloc] init];
+		[self.noteArray addObject:subBeatNotes];
+		[subBeatNotes release];
+	}	
 	
 }
 - (void)play{
 	
 }
 
-- (void)tick{
-	self.position++;
-	if (self.position % (self.quarterNotes * kSubBeatsPerMeasure) == 1) self.position = 0;
-	id note;
-	note = [self.noteArray objectAtIndex:self.position];
-	
-	
-	if (note) {
-		NSLog(@"Play a note");
-	}else {
-		NSLog(@"be slient");
-	}
+- (void)stop{
+	[self.loopTimer invalidate];
+}
 
+- (void)tick{
+	NSLog(@"Tick %d",self.position);
+	if(self.position % (kSubBeatsPerMeasure * self.quarterNotes)==0) self.position = 0;
+	self.position++;
+	@try {
+		[self playNotesAtSubBeat:self.position];
+	}
+	@catch (NSException * e) {
+		// We're cool, just rest.
+	}
+	@finally {
+		// Nothing to do here
+	}
 	
-	
-/*	currentPos++;
-	NSSet 
-	 = [self.noteArray objectAtIndex:currentPos];
-	[self playNotesAtSubBeat:
-*/
 }
 
 - (void)playNotesAtSubBeat:(NSUInteger)subBeat{
-	
+	NSMutableSet *notes = [self.noteArray objectAtIndex:subBeat];
+	for (NSString *soundKey in notes){
+		[self.soundPlayer playSound:soundKey];
+	}
+}
+
+- (void)recordSoundAtCurrentSubBeat:(NSString*)note{
+	NSLog(@"recording: %@",note);
+	NSMutableSet *notes = [self.noteArray objectAtIndex:self.position];
+	[notes addObject:note]; // a soundKey from player
 }
 
 #pragma mark timer

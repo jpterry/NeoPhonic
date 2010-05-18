@@ -22,10 +22,12 @@
 	UIPickerView *soundPickerView;
 	UISlider *gainSlider, *pitchSlider;
 	NSArray *categories, *instruments;
+	UIButton *button;
 
 }
 @property (assign) id<SoundPickerViewControllerDelegate> delegate;
 @property (nonatomic, retain) SoundPlayer *player;
+@property (nonatomic, retain) UIButton *button;
 @property (nonatomic, retain) NeoSound *selectedSound;
 @property (nonatomic, retain) IBOutlet UILabel *soundLabel;
 @property (nonatomic, retain) IBOutlet UIPickerView *soundPickerView;
@@ -34,12 +36,15 @@
 
 - (IBAction)playPressed:(id)sender;
 - (IBAction)savePressed:(id)sender;
+- (IBAction)donePressed:(id)sender;
 
 @end
 
 #pragma mark -
 #pragma mark delegate protocol
 @protocol SoundPickerViewControllerDelegate<NSObject>
+-(void)soundPickerControllerDidCancel:(SoundPickerViewController*)controller;
+@optional
 -(void)soundPickerController:(SoundPickerViewController*)controller 
 			  DidChooseSound:(NeoSound*)sound 
 					WithGain:(float)gain 

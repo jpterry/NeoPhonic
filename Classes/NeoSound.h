@@ -7,7 +7,6 @@
 //
 
 #import <CoreData/CoreData.h>
-//#import "SoundPlayer.h"
 
 @interface NeoSound :  NSManagedObject  
 {
