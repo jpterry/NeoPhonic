@@ -1,12 +1,14 @@
 .DS_Store
 *.swp
+*~
 
 build/
 *.zip
+*.[oa]
 
+*.mode1
+*.mode1v3
+*.mode2v3
 *.pbxuser
 *.perspective
 *.perspectivev3
-
-*.mode1v3
-*.mode2v3
