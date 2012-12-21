@@ -8,7 +8,7 @@
 
 #import "Loop.h"
 
-#define kSubBeatsPerMeasure 16
+#define kSubBeatsPerMeasure 16 // Triplets? All beats are snapped to sixteenth notes?
 
 // A single measure
 @implementation Loop

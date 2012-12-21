@@ -10,12 +10,11 @@
 
 #import "NeoPhonicAppDelegate.h"
 
-@implementation NeoSound 
+@implementation NeoSound
 
 @dynamic name;
 @dynamic category;
 @dynamic fileName;
-
 
 - (NSString*)fullPath{
 	NeoPhonicAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];

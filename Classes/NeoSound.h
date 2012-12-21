@@ -8,7 +8,7 @@
 
 #import <CoreData/CoreData.h>
 
-@interface NeoSound :  NSManagedObject  
+@interface NeoSound :  NSManagedObject
 {
 }
 

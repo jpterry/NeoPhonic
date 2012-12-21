@@ -44,8 +44,8 @@
 		return nil;
 	}
 	
-	NSString *key = [NSString stringWithFormat:@"%@%g%g",sound.fileName,gain,pitch];
-	NSLog(@"preparing sound: %@",key);
+	NSString *key = [NSString stringWithFormat:@"%@%g%g", sound.fileName, gain, pitch];
+	NSLog(@"preparing sound: %@", key);
 	
 	NSUInteger bufferID;
 	if ([self.bufferDictionary objectForKey:key]) {
@@ -68,20 +68,20 @@
 		result = AudioFileReadBytes(fileID, false, 0, &fileSize, outData);
 		AudioFileClose(fileID); //close the file
 		
-		if (result != 0) NSLog(@"cannot load effect: %@",sound.fileName);
+		if (result != 0) NSLog(@"cannot load effect: %@", sound.fileName);
 		
 		// grab a buffer ID from openAL
 		alGenBuffers(1, &bufferID);
 		
 		// jam the audio data into the new buffer
-		alBufferData(bufferID,AL_FORMAT_STEREO16,outData,fileSize,44100); 
+		alBufferData(bufferID, AL_FORMAT_STEREO16, outData, fileSize, 44100); 
 		
 		// save the buffer so I can release it later
 		// TODO: set up this array so it works, we're leaking for now.
 
 		[self.bufferDictionary setObject:[NSNumber numberWithUnsignedInteger:bufferID] forKey:key];
 		
-		// clean up the buffer
+		// clean up the intermediate buffer 
 		if (outData) {
 			free(outData);
 			outData = NULL;
@@ -168,11 +168,9 @@
 -(AudioFileID)openAudioFile:(NSString*)filePath{
 	AudioFileID outAFID;
 	NSURL *afUrl = [NSURL fileURLWithPath:filePath];
-#if TARGET_OS_IPHONE
-	OSStatus result = AudioFileOpenURL((CFURLRef)afUrl, kAudioFileReadPermission, 0, &outAFID);
-#else // TODO: This doesn't work, but maybe someday might
-	OSStatus result = AudioFileOpenURL((CFURLRef)afUrl, kAudioFileReadPermission, 0, &outAFID);
-#endif
+	
+    OSStatus result = AudioFileOpenURL((CFURLRef)afUrl, kAudioFileReadPermission, 0, &outAFID);    
+
 	if (result != 0) NSLog(@"cannot openf file: %@",filePath);
 	return outAFID;
 }

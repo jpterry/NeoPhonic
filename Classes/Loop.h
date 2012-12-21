@@ -10,6 +10,8 @@
 // This is slow and imperfect and all-in-all not really very good. But it works.
 // TODO: Make this using function calls instead (C/C++)
 
+// Audio processing should have its own thread and use openal timers for metronome
+
 #import <UIKit/UIKit.h>
 #import "SoundPlayer.h"
 

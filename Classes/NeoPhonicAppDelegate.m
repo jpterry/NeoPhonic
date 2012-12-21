@@ -188,12 +188,13 @@
 	NSLog(@"Done copying");
 	
 	// Insert Sounds into core data store
-	NSArray *catNames = [fm directoryContentsAtPath:[self soundsDirectory]];
+    // TODO: new api returns an enumerator    
+    NSArray *catNames = [fm contentsOfDirectoryAtPath:[self soundsDirectory] error:&error];
 	
 	for (NSString *category in catNames){
 		NSLog(@"in category %@:", category);
 		NSString *currentPath = [[self soundsDirectory] stringByAppendingPathComponent:category];
-		NSArray *soundFileNames = [fm directoryContentsAtPath:currentPath];
+		NSArray *soundFileNames = [fm contentsOfDirectoryAtPath:currentPath error:&error];
 		for( NSString *soundFileName in soundFileNames){
 			NSLog(@"Inserting: %@",soundFileName);
 			NSManagedObject *newSound = [NSEntityDescription insertNewObjectForEntityForName:@"NeoSound" inManagedObjectContext:self.managedObjectContext];
